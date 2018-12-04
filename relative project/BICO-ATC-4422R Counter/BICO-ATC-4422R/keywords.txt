@@ -1,0 +1,6 @@
+#####ClassColor####
+Bico_Check_Bit_Change	KEYWORD1
+
+
+#####VarAndMethodColor####
+isChanging	KEYWORD2

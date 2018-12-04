@@ -1,0 +1,2 @@
+ngõ vào Opto qua qua trở lớn quá (10k), nên thay bằng loại 1k hay 680
+ngõ ra của Opto (cũng là ngõ vào chân digital của Arduino ko có điện trở kéo lên hay keo xuống)
