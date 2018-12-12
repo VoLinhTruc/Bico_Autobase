@@ -1,2 +1,0 @@
-chua co exception 4
-ham handling chi moi response exception chu chua return loi, hien tai van la kieu void
