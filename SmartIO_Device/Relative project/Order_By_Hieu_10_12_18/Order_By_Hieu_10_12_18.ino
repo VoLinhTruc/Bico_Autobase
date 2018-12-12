@@ -51,7 +51,7 @@ void loop() {
       register_t temp_reg[NUM_OF_REG];  // tao mang tam thoi
       master.RTUSoftSerialGetReadHoldingRegistersValue(temp_reg); // lay gia tri cac thanh ghi vua nhan duoc tu slave dua vao cac thanh ghi tam thoi
   
-      #define FIRST_LOCATION_FOR_PERIPHERAL_REG 6
+      #define FIRST_LOCATION_FOR_PERIPHERAL_REG 0
       for(uint8_t i = 0; i < NUM_OF_REG; i++)
       {
         slave_analog_output_holding_register_list[FIRST_LOCATION_FOR_PERIPHERAL_REG + i] = temp_reg[i];
