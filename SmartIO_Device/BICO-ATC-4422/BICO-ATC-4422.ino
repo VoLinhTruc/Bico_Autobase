@@ -5,8 +5,6 @@
 #define DI2 5 
 #define DI3 4 
 
-// OUTPUT active as low level
-// OUTPUT tich cuc muc thap
 #define DO0 14 // A0
 #define DO1 15 // A1
 #define DO2 16 // A2

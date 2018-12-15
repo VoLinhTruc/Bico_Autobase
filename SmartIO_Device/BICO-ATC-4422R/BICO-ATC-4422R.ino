@@ -35,6 +35,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   modbus.fullHanlde();
   IOUpdate();
+  updateRTD();
 
   if(millis() - last_esp_polling > ESP_POLLING_TIMEOUT)
   {
@@ -119,6 +120,11 @@ void IOUpdate()
   digitalWrite(DO3, getBitFromArray(slave_discrete_output_coil_list, 3));
 }
 
+void updateRTD()
+{
+  slave_analog_output_holding_register_list[6] = analogRead(RTD0);
+  slave_analog_output_holding_register_list[7] = analogRead(RTD1);
+}
 
 
 void serialEvent() 
