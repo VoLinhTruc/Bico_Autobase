@@ -1,4 +1,4 @@
-#include "Arduino_Slave_IP_Serial.h"
+#include "Arduino_Slave_RTU_Serial.h"
 #include "Bico_Check_Bit_Change.h"
 
 #define DI0 10
@@ -19,7 +19,7 @@
 
 #define ESP_RESET 4
 
-Arduino_Slave_IP_Serial modbus;
+Arduino_Slave_RTU_Serial modbus;
 
 #define ESP_POLLING_TIMEOUT 5000
 long last_esp_polling = 0;
@@ -36,6 +36,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   modbus.fullHanlde();
   IOUpdate();
+  updateAnalogIn();
 
   if(millis() - last_esp_polling > ESP_POLLING_TIMEOUT)
   {
@@ -50,21 +51,28 @@ void loop() {
   #define ENABLE_BIT getBitFromArray(slave_discrete_input_contact_list, 1)
   #define COUNTING_BIT getBitFromArray(slave_discrete_input_contact_list, 2)
   #define RESET_BIT getBitFromArray(slave_discrete_input_contact_list, 3)
-  #define TIMING_0 slave_analog_output_holding_register_list[5];
+  #define TIMING_0 slave_analog_output_holding_register_list[5]
   
-  if(ENABLE_BIT)
+  #define IO_ACTIVE_STATE HIGH
+  
+  if(ENABLE_BIT == IO_ACTIVE_STATE)
   {
-    static uint32_t last_active_0 = 0;
-    static Bico_Check_Bit_Change input_0(INPUT_0);
-    uint8_t changing_type_0 = input_0.isChanging(INPUT_0);
+    static uint32_t last_active_value_0 = 0;
+    static Bico_Check_Bit_Change input_0(COUNTING_BIT);
+    uint8_t changing_type_0 = input_0.isChanging(COUNTING_BIT);
     if(changing_type_0 == RISING)
     {
+      delay(20); // for stability
       TIMING_0 = 0;
-      last_active_0 = millis();
+      last_active_value_0 = millis();
     }
-    if(INPUT_0 == IO_ACTIVE_STATE)
+    else if(changing_type_0 == FALLING)
     {
-      TIMING_0 = millis() - last_active_0;
+      delay(20); // for stability
+    }
+    if(COUNTING_BIT == IO_ACTIVE_STATE)
+    {
+      TIMING_0 = millis() - last_active_value_0;
     }
   }
 
@@ -72,7 +80,7 @@ void loop() {
   uint8_t changing_type = check_reset_bit_change.isChanging(RESET_BIT);
     if(changing_type == RISING)
     {
-      COUNTING_VALUE = 0;
+      TIMING_0 = 0;
     }
 }
 
@@ -127,6 +135,12 @@ void IOUpdate()
   digitalWrite(DO3, getBitFromArray(slave_discrete_output_coil_list, 3));
 }
 
+
+void updateAnalogIn()
+{
+  slave_analog_output_holding_register_list[6] = analogRead(RTD0);
+  slave_analog_output_holding_register_list[7] = analogRead(RTD1);
+}
 
 
 void serialEvent() 

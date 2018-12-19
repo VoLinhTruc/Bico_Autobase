@@ -1,4 +1,4 @@
-#include "Arduino_Slave_IP_Serial.h"
+#include "Arduino_Slave_RTU_Serial.h"
 
 #define DI0 10
 #define DI1 9
@@ -18,7 +18,7 @@
 
 #define ESP_RESET 4
 
-Arduino_Slave_IP_Serial modbus;
+Arduino_Slave_RTU_Serial modbus;
 
 #define ESP_POLLING_TIMEOUT 5000
 long last_esp_polling = 0;
@@ -35,7 +35,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   modbus.fullHanlde();
   IOUpdate();
-  updateRTD();
+  updateAnalogIn();
 
   if(millis() - last_esp_polling > ESP_POLLING_TIMEOUT)
   {
@@ -120,7 +120,7 @@ void IOUpdate()
   digitalWrite(DO3, getBitFromArray(slave_discrete_output_coil_list, 3));
 }
 
-void updateRTD()
+void updateAnalogIn()
 {
   slave_analog_output_holding_register_list[6] = analogRead(RTD0);
   slave_analog_output_holding_register_list[7] = analogRead(RTD1);
