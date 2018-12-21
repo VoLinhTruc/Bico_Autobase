@@ -1,4 +1,4 @@
-#include "Arduino_Slave_IP_Serial.h"
+#include "Arduino_Slave_RTU_Serial.h"
 
 #define DI0 7 
 #define DI1 6 
@@ -18,7 +18,7 @@
 
 #define ESP_RESET A5
 
-Arduino_Slave_IP_Serial modbus;
+Arduino_Slave_RTU_Serial modbus;
 
 #define ESP_POLLING_TIMEOUT 5000
 long last_esp_polling = 0;
